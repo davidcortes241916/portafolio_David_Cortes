@@ -4,5 +4,5 @@ from apps.portafolio import views
 app_name= 'portafolio'
 
 urlpatterns = [
-    path("", views.index, name="Inicio"),
+    path("", views.index, name="inicio"),
 ]
