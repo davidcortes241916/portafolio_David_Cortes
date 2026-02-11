@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     ##apps 
     'apps.portafolio.apps.PortafolioConfig',
 
+    #proyectos
+    #pagina de suscripciones
+    'apps.proyectos.suscripciones_pagos.precios_suscripcion',
+    'apps.proyectos.suscripciones_pagos.cuenta',
+    'apps.proyectos.suscripciones_pagos.pagos',
+
     #frameworks
     'rest_framework',
 ]

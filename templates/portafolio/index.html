@@ -31,7 +31,7 @@
                             <li class="nav-item"><a class="nav-link" href="{% url "portafolio:inicio" %}">Inicio</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url "portafolio:resumen" %}">Resumen</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url "portafolio:proyectos" %}">Proyectos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url "portafolio:contacto" %}">Contacto</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url "portafolio:contacto" %}">Contactos</a></li>
                         </ul>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                                 <div class="fs-3 fw-light text-muted">Desarrollo soluciones backend</div>
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">con Python y Django</span></h1>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                    <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="resume.html">Resumen</a>
-                                    <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="projects.html">Proyectos</a>
+                                    <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="{% url "portafolio:resumen" %}">Resumen</a>
+                                    <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="{% url "portafolio:proyectos" %}">Proyectos</a>
                                 </div>
                             </div>
                         </div>
@@ -187,8 +187,7 @@
                                 <p class="lead fw-light mb-4">Mi nombre es David Cortes, soluciones web eficientes y escalables</p>
                                 <p class="text-muted">Desarrollador web con enfoque en backend y construcción de aplicaciones con Python y Django. Tengo experiencia trabajando en desarrollo de páginas web, APIs y soluciones funcionales para proyectos reales. <br> Disfruto resolver problemas mediante código limpio y estructurado, priorizando la seguridad, el rendimiento y la escalabilidad. Me encuentro en constante aprendizaje, fortaleciendo mis habilidades para aportar soluciones tecnológicas eficientes y confiables.</p>
                                 <div class="d-flex justify-content-center fs-2 gap-4">
-                                    <a class="text-gradient" href="https://www.linkedin.com/in/david-alejandro-cortes-martha-b6835721b/" target="_blank"
-><i class="bi bi-linkedin"></i></a>
+                                    <a class="text-gradient" href="https://www.linkedin.com/in/david-alejandro-cortes-martha-b6835721b/" target="_blank"><i class="bi bi-linkedin"></i></a>
                                     <a class="text-gradient" href="https://github.com/davidcortes241916?tab=repositories" target="_blank"><i class="bi bi-github"></i></a>
                                 </div>
                             </div>
@@ -198,20 +197,7 @@
             </section>
         </main>
         <!-- Footer cambiarlo por un block-->
-        <footer class="bg-white py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2023</div></div>
-                    <div class="col-auto">
-                        <a class="small" href="#!">Privacy</a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Terms</a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        {% include "blocks/footer.html" %}
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
