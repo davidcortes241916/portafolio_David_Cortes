@@ -1,0 +1,29 @@
+{% extends "proyectos/pagina_suscripciones/base.html" %}
+{% load static %}
+
+{% block contenido %}
+<div class="container px-8 px-lg-5" style="padding: 8% 10%">
+    <h1>INICIO DE SESION</h1><br><br>
+    <form>
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="form2Example1" class="form-control" />
+            <label class="form-label" for="form2Example1">Email</label>
+        </div>
+
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="password" id="form2Example2" class="form-control" />
+            <label class="form-label" for="form2Example2">Contraseña</label>
+        </div>
+
+        <!-- Submit button -->
+        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Ingresar</button>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>No tienes cuenta?<a href="{% url "cuenta:registro" %}"> Registrate ahora</a></p>
+        </div>
+    </form>
+</div>
+{% endblock contenido %}

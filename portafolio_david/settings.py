@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.proyectos.suscripciones_pagos.precios_suscripcion',
     'apps.proyectos.suscripciones_pagos.cuenta',
     'apps.proyectos.suscripciones_pagos.pagos',
+    'apps.proyectos.suscripciones_pagos.suscripciones',
 
     #frameworks
     'rest_framework',
@@ -77,6 +78,13 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 WSGI_APPLICATION = 'portafolio_david.wsgi.application'
 
@@ -145,3 +153,6 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = 'davidalejandro241916@gmail.com'
 EMAIL_HOST_PASSWORD = 'leauhpaoxbanmuuj'
+
+#base de datos
+AUTH_USER_MODEL = "cuenta.User"
