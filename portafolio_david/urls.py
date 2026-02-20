@@ -22,5 +22,5 @@ urlpatterns = [
     path("", include("apps.portafolio.urls", namespace='portafolio')),
     #proyecto suscripciones
     path("suscripciones/", include("apps.proyectos.suscripciones_pagos.precios_suscripcion.urls", namespace='precios')),
-    path("cuenta/", include("apps.proyectos.suscripciones_pagos.cuenta.urls", namespace='cuenta')),
+    path("cuenta/", include("apps.proyectos.suscripciones_pagos.cuenta.urls", namespace="cuenta")),
 ]

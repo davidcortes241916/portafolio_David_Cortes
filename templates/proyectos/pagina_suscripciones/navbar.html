@@ -4,9 +4,15 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url "cuenta:index" %}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url "precios_suscripcion:index" %}">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Pagos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "cuenta:login" %}">Iniciar sesion</a></li> <!--o registar eso luego se realiza-->
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url "cuenta:logout" %}">Cerrar sesion</a></li>
+                            <li class="nav-item" style="color: white; padding: 0.5rem 1rem;">{{request.user.name}}</li>
+                        {% elif not request.user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url "cuenta:login" %}">Iniciar sesion</a></li> <!--o registar eso luego se realiza-->
+                            <li class="nav-item"><a class="nav-link" href="{% url "cuenta:registro" %}">Registrarse</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

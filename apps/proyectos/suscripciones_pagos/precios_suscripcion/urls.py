@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from apps.proyectos.suscripciones_pagos.precios_suscripcion import views
-app_name= 'apps.proyectos.suscripciones_pagos.precios_suscripcion'
+
+app_name= 'precios_suscripcion'
 
 urlpatterns = [
-    path("", views.index, name="inicio"),
+    path("", views.index, name="index"),
 ]

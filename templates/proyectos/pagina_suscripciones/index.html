@@ -9,7 +9,7 @@
                 <div class="col-lg-7">
                     <h1 class="font-weight-light">Suscripción Premium: Acceso Ilimitado</h1>
                     <p>Desbloquea herramientas exclusivas para potenciar tu carrera como desarrollador. Únete a nuestra comunidad y accede a contenido especializado, mentorías y recursos descargables cada mes.</p>
-                    <a class="btn btn-primary" href="#!">¡Empieza Ahora!</a> <!--Esto ira al inicio de sesion-->
+                    <a class="btn btn-primary" href="{% url "cuenta:login" %}">¡Empieza Ahora!</a> <!--Esto ira al inicio de sesion-->
                 </div>
             </div>
             <!-- Call to Action-->
@@ -19,15 +19,17 @@
             <!-- Content Row-->
             <!--los planes se haran por admin, por lo que solo se necesita una tarjeta de boceto-->
             <div class="row gx-4 gx-lg-5">
+                {% for suscripcion in suscripciones %}
                 <div class="col-md-4 mb-5">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h2 class="card-title">Plan Básico ($0 - Gratis)</h2>
-                            <p class="card-text">Ideal para explorar la plataforma.<br>• Acceso a cursos gratuitos introductorios.<br>• Foros de discusión públicos.<br>• Certificados de participación simples.<br>• 1 proyecto práctico de práctica.</p>
+                            <h2 class="card-title">{{suscripcion.nombre}}</h2>
+                            <p class="card-text">{{suscripcion.descripcion}}</p>
                         </div>
                         <div class="card-footer"><a class="btn btn-primary btn-sm" href="#!">Suscribirme</a></div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
 {% endblock contenido %}
