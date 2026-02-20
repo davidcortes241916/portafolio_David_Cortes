@@ -4,21 +4,22 @@
 {% block contenido %}
 <div class="container px-8 px-lg-5" style="padding: 8% 10%">
     <h1>INICIO DE SESION</h1><br><br>
-    <form>
+    <form id="loginForm">
+        {% csrf_token %}
         <!-- Email input -->
         <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form2Example1" class="form-control" />
+            <input type="email" id="email" class="form-control" />
             <label class="form-label" for="form2Example1">Email</label>
         </div>
 
         <!-- Password input -->
         <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control" />
+            <input type="password" id="password" class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
         </div>
 
         <!-- Submit button -->
-        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Ingresar</button>
+        <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Ingresar</button>
 
         <!-- Register buttons -->
         <div class="text-center">
@@ -27,3 +28,60 @@
     </form>
 </div>
 {% endblock contenido %}
+
+{% block scripts %}
+<script>
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    fetch("/cuenta/login_usuario/", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    .then(response => {
+        return response.json().then(data => ({
+            status: response.status,
+            body: data
+        }));
+    })
+    .then(res => {
+
+        if (res.status === 200) {
+            alert(res.body.message);
+            window.location.href = res.body.redirect_url;
+        } else {
+            alert(res.body.non_field_errors || "Error en login");
+        }
+
+    });
+
+});
+</script>
+{% endblock scripts %}

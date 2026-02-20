@@ -4,34 +4,98 @@
 {% block contenido %}
 <div class="container px-8 px-lg-5" style="padding: 8% 10%">
     <h1>REGISTRAR</h1><br><br>
-    <form>
+    <form id="registerForm">
+        {% csrf_token %}
         <!-- Name input -->
         <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">Usuario</label>
+            <input type="text" id="name" class="form-control" />
+            <label  class="form-label" for="form2Example2">Usuario</label>
+        </div>
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="email" class="form-control" />
+            <label  class="form-label" for="form2Example2">Email</label>
         </div>
 
-        <!-- Email input -->
         <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">Email</label>
-        </div>
-
-        <!-- Password input -->
-        <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control" />
+            <input type="password" id="password" class="form-control" />
             <label class="form-label" for="form2Example2">Contraseña</label>
         </div>
 
-        <!-- Password2 input -->
         <div data-mdb-input-init class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control" />
+            <input type="password" id="password2" class="form-control" />
             <label class="form-label" for="form2Example2">Confirmar Contraseña</label>
         </div>
-
         <!-- Submit button -->
-        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Registrar</button>
-        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Cancelar</button>
+        <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Registrar</button>
+        <button 
+            type="button" 
+            onclick="window.location.href='{% url 'cuenta:login' %}'"
+            class="btn btn-primary btn-block mb-4">
+            Cancelar</button>    
     </form>
+    <p id="mensaje"></p>
 </div>
 {% endblock contenido %}
+{% block scripts %}
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const password2 = document.getElementById("password2").value;
+
+    if (password !== password2) {
+        alert("Las contraseñas no coinciden");
+        return;
+    }
+
+
+    fetch("/cuenta/registro_usuario/", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken")
+    },
+    body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+        password2: password2
+    })
+    })
+    .then(response => {
+        return response.json().then(data => ({
+            status: response.status,
+            body: data
+        }));
+    })
+    .then(res => {
+
+        if (res.status === 201) {
+            alert(res.body.message);
+            window.location.href = "/cuenta/login/";
+        } else {
+            alert(res.body.error);
+        }
+
+    });
+});
+</script>
+{% endblock scripts %}

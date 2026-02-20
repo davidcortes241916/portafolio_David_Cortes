@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Suscripcion
 
-# Register your models here.
+
+@admin.register(Suscripcion)
+class SuscripcionAdmin(admin.ModelAdmin):
+    list_display = ("nombre", "precio", "activa", "fecha_creacion")
+    list_filter = ("activa",)
+    search_fields = ("nombre",)
