@@ -1,0 +1,9 @@
+{% extends "proyectos/pagina_suscripciones/base.html" %}
+{% load static %}
+
+{% block contenido %}
+     <h2>✅ Pago realizado con éxito</h2>
+    <p>Gracias por tu compra.</p>
+
+    <a href="{% url 'precios_suscripcion:index' %}">Volver al inicio</a>
+{% endblock contenido %}

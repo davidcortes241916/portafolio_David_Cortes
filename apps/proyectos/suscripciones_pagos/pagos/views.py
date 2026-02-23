@@ -8,60 +8,77 @@ from .models import Pago
 from .services import crear_sesion_checkout
 from apps.proyectos.suscripciones_pagos.precios_suscripcion.models import Suscripcion
 from apps.proyectos.suscripciones_pagos.suscripciones.models import UsuarioSuscripcion
-
-
-def crear_pago(request, suscripcion_id):
-    suscripcion = get_object_or_404(Suscripcion, id=suscripcion_id)
-
-    session = crear_sesion_checkout(request.user, suscripcion)
-
-    # Guardamos pago pendiente
-    Pago.objects.create(
-        usuario=request.user,
-        suscripcion=suscripcion,
-        stripe_payment_intent=session.id,
-        monto=suscripcion.precio,
-        estado="pendiente"
-    )
-
-    return redirect(session.url)
+from django.utils import timezone
+from datetime import timedelta
 
 
 def success(request):
-    return render(request, "pagos/success.html") #url esta mal cambiarla y crearla plantilla success.html en la carpeta pagos/templates/pagos/success.html
+    session_id = request.GET.get("session_id")
+
+    if not session_id:
+        return redirect("precios_suscripcion:index")
+
+    session = stripe.checkout.Session.retrieve(session_id)
+
+    usuario_id = session["metadata"]["usuario_id"]
+    suscripcion_id = session["metadata"]["suscripcion_id"]
+
+    UsuarioSuscripcion.objects.update_or_create(
+        usuario_id=usuario_id,
+        defaults={
+            "suscripcion_id": suscripcion_id,
+            "estado": "activa",
+            "pagado": True,
+            "fecha_vencimiento": timezone.now() + timedelta(days=30)
+        }
+    )
+
+    return render(request, "proyectos/pagina_suscripciones/success.html")
 
 
 def cancel(request):
-    return render(request, "pagos/cancel.html") #igual esta url esta mal cambiarla y crear plantilla cancel.html en la carpeta pagos/templates/pagos/cancel.html
+    return render(request, "proyectos/pagina_suscripciones/cancel.html") 
+
+#json respuesta para crear pago desde frontend con fetch
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .services import crear_sesion_checkout
+from .models import Suscripcion
+
+@login_required
+def crear_pago(request, suscripcion_id):
+
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"error": "Debes iniciar sesión para suscribirte."},
+            status=401
+        )
+
+    suscripcion = Suscripcion.objects.get(id=suscripcion_id)
+    session = crear_sesion_checkout(request.user, suscripcion)
+
+    return JsonResponse({"sessionId": session.id})
 
 #webhook para recibir notificaciones de Stripe
 @csrf_exempt
 def stripe_webhook(request):
+    print("🔥 WEBHOOK RECIBIDO")
+
     payload = request.body
-    sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
-    event = None
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+
+    if not sig_header:
+        print("❌ No signature header")
+        return HttpResponse(status=400)
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except Exception:
+    except Exception as e:
+        print("❌ Error verificando webhook:", e)
         return HttpResponse(status=400)
 
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-
-        usuario_id = session["metadata"]["usuario_id"]
-        suscripcion_id = session["metadata"]["suscripcion_id"]
-
-        pago = Pago.objects.get(stripe_payment_intent=session["id"])
-        pago.estado = "exitoso"
-        pago.save()
-
-        UsuarioSuscripcion.objects.create(
-            usuario_id=usuario_id,
-            suscripcion_id=suscripcion_id,
-            pagado=True
-        )
+    print("✅ Evento recibido:", event["type"])
 
     return HttpResponse(status=200)

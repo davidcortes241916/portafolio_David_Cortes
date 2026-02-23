@@ -11,6 +11,7 @@ from apps.proyectos.suscripciones_pagos.cuenta.models import User
 from django.contrib.auth import login as auth_login
 from .serializers import LoginSerializer
 from django.contrib.auth import logout
+from django.urls import reverse
 
 
 #json
@@ -80,7 +81,7 @@ class LoginUsuarioView(APIView):
             auth_login(request, user)
 
             return Response(
-                {"message": "Login exitoso", "redirect_url": "proyectos/pagina_suscripciones/index.html"},
+                {"message": "Login exitoso", "redirect_url": reverse("precios_suscripcion:index")},
                 status=status.HTTP_200_OK,
                 
             )

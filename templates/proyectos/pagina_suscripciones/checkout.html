@@ -1,0 +1,20 @@
+{% extends "proyectos/pagina_suscripciones/base.html" %}
+{% load static %}
+
+{% block title %}pago{% endblock title %}
+
+{% block contenido %}
+    <h2>Redirigiendo al pago...</h2>
+
+    <script>
+        const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+
+        stripe.redirectToCheckout({
+            sessionId: "{{ session_id }}"
+        }).then(function (result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        });
+    </script>
+{% endblock contenido %}

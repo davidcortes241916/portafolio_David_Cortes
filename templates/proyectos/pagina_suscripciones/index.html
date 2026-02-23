@@ -14,8 +14,25 @@
             </div>
             <!-- Call to Action-->
             <div class="card text-white bg-secondary my-5 py-4 text-center">
-                <div class="card-body"><p class="text-white m-0">Elige el plan que mejor se adapte a tus metas profesionales y comienza hoy mismo.</p></div>
+                <div class="card-body"><p class="text-white m-0">Elige el plan que mejor se adapte a tus metas profesionales y comienza hoy mismo. <br>{% if request.user.is_authenticated %}
+                            <p>Conoce nuestros planes:</p>
+                        {% elif not request.user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url "cuenta:login" %}">Es necesario registrar usuario para poder suscribirse</a></li>
+                        {% endif %}</p></div>
             </div>
+            {% if request.user.is_authenticated %}
+                            {% if suscripcion_usuario %}
+                                <div class="alert alert-success">
+                                    <strong>Suscripción activa:</strong> 
+                                    {{ suscripcion_usuario.suscripcion.nombre }} <br>
+                                    Válida hasta: {{ suscripcion_usuario.fecha_vencimiento|date:"d/m/Y" }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    No tienes una suscripción activa.
+                                </div>
+                            {% endif %}
+                        {% endif %}
             <!-- Content Row-->
             <!--los planes se haran por admin, por lo que solo se necesita una tarjeta de boceto-->
             <div class="row gx-4 gx-lg-5">
@@ -26,10 +43,41 @@
                             <h2 class="card-title">{{suscripcion.nombre}}</h2>
                             <p class="card-text">{{suscripcion.descripcion}}</p>
                         </div>
-                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="#!">Suscribirme</a></div>
+                        <div class="card-footer"><a href="{% url 'pagos:crear_pago' suscripcion.id %}" 
+                        class="btn btn-primary btn-suscribirse">
+                        Suscribirme
+                        </a></div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
 {% endblock contenido %}
+
+{% block scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    document.querySelectorAll(".btn-suscribirse").forEach(btn => {
+    btn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        fetch(this.href)
+            .then(response => {
+                if (response.status === 401) {
+                    window.location.href = "/login/";
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                const stripe = Stripe("pk_test_51T3RS2Bm2SKJ1Qf4SNnIGdrNi0hVtYNpLLxlr4SuzwSewYuC65J9WfQv7dOIbvCL6l7xz1c4J0TdMd4FOrFR2zmy00FnXTBTeH");
+                stripe.redirectToCheckout({ sessionId: data.sessionId });
+            });
+    });
+});
+</script>
+{% endblock scripts %}
+

@@ -49,10 +49,11 @@
                                 <div class="card-body p-0">
                                     <div class="d-flex align-items-center">
                                         <div class="p-5">
-                                            <h2 class="fw-bolder">Project Name 1</h2>
-                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius at enim eum illum aperiam placeat esse? Mollitia omnis minima saepe recusandae libero, iste ad asperiores! Explicabo commodi quo itaque! Ipsam!</p>
+                                            <h2 class="fw-bolder">Suscribciones con Stripe</h2><br>
+                                            <p>Sistema de suscripciones seguro usando Django nativo, DRF y Stripe, que permite gestionar pagos recurrentes de manera automática y confiable. Los usuarios pueden suscribirse mientras que la integración con Stripe asegura transacciones seguras y escalables. Ideal para servicios digitales, membresías o productos premium.</p><br>
+                                            <a href="{% url "precios_suscripcion:index" %}" class="btn btn-primary">Ver proyecto</a>
                                         </div>
-                                        <img class="img-fluid" src="https://dummyimage.com/300x400/343a40/6c757d" alt="..." />
+                                        <img class="img-fluid" src="{% static "/assets/proyecto_suscripciones.png" %}" alt="Suscripciones" style="padding: 20px;"/>
                                     </div>
                                 </div>
                             </div>

@@ -22,7 +22,7 @@ def crear_sesion_checkout(usuario, suscripcion):
                 "quantity": 1,
             }
         ],
-        success_url="http://127.0.0.1:8000/pagos/success/",
+        success_url="http://127.0.0.1:8000/pagos/success/?session_id={CHECKOUT_SESSION_ID}",
         cancel_url="http://127.0.0.1:8000/pagos/cancel/",
         metadata={
             "usuario_id": usuario.id,
