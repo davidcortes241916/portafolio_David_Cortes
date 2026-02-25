@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'apps.proyectos.suscripciones_pagos.cuenta',
     'apps.proyectos.suscripciones_pagos.pagos',
     'apps.proyectos.suscripciones_pagos.suscripciones',
+    #call_center
+    'apps.proyectos.call_center.ticket',
+    'apps.proyectos.call_center.chat',
 
     #frameworks
     'rest_framework',
